@@ -20,7 +20,6 @@
       </a-col>
       <a-table
         :columns="columns"
-        :row-key="record => record.login.uuid"
         :data-source="data"
         :pagination="pagination"
         :loading="loading"
@@ -38,35 +37,37 @@ export default {
       columns: [
         {
           title: 'Order name',
-          dataIndex: 'orderName',
+          dataIndex: 'order_name',
           sorter: true,
           width: '20%',
           scopedSlots: { customRender: 'orderName' }
         },
         {
           title: 'Customer Company',
-          dataIndex: 'cc'
+          dataIndex: 'customer_company'
         },
         {
           title: 'Customer Name',
-          dataIndex: 'cn'
+          dataIndex: 'customer_name'
         },
         {
           title: 'Order date',
-          dataIndex: 'od'
+          dataIndex: 'order_date'
         },
         {
           title: 'Delivered Amount',
-          dataIndex: 'da'
+          dataIndex: 'delivered_amount'
         },
         {
           title: 'Total amount',
-          dataIndex: 'ta'
+          dataIndex: 'total_amount'
         }
       ],
       data: [],
       pagination: {},
-      loading: false
+      loading: false,
+      start: 0,
+      end: 5
     }
   },
   mounted () {
@@ -74,7 +75,11 @@ export default {
   },
   methods: {
     async fetch (params = {}) {
-      const ip = await this.$axios.$get('http://localhost:8000/v1/orders')
+      const ip = await this.$axios.$post('http://localhost:8000/v1/orders', {
+        start: this.start,
+        end: this.end
+      })
+      this.data = ip
       console.log(ip)
     },
     handleTableChange () {
