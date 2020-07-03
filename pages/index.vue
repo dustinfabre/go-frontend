@@ -64,7 +64,9 @@ export default {
         }
       ],
       data: [],
-      pagination: {},
+      pagination: {
+        total: 0
+      },
       loading: false,
       start: 0,
       end: 5
@@ -79,8 +81,10 @@ export default {
         start: this.start,
         end: this.end
       })
-      this.data = ip
-      console.log(ip)
+      if (ip != null) {
+        this.data = ip
+        this.pagination.total = ip[0].total_row
+      }
     },
     handleTableChange () {
       console.log('test')
